@@ -1,0 +1,60 @@
+#!/usr/bin/python3 -i
+import codecs
+
+len_str = 260
+
+def parseHeader(filename):
+	fp = open(filename, 'rb')
+	data = fp.read()
+	fp.close()
+
+	offset = 0
+
+	#File header, 8 char string
+	filestamp = bytearray()
+	for count in range(8):
+		filestamp.append(data[count])
+	offset = count
+	print(filestamp)
+
+	#Demo protocol, signed int
+	protocol_dem = bytearray()
+	for count in range(4):
+		protocol_dem.append(data[count + offset])
+	protocol_dem = int.from_bytes(protocol_dem, byteorder='little', signed=True)
+	offset += count
+	print(protocol_dem)
+
+	#Network protocol, signed int
+	protocol_net = bytearray()
+	for count in range(4):
+		protocol_net.append(data[count + offset])
+	protocol_net = int.from_bytes(protocol_net, byteorder='little', signed=True)
+	offset += count
+	print(protocol_net)
+
+	#Server name, 260 char string
+	svr_name = bytearray()
+	for count in range(len_str):
+		svr_name.append(data[count + offset])
+	offset += count
+	svr_name = codecs.decode(svr_name)
+	print(svr_name)
+
+	#Client name, 260 char string
+	client = bytearray()
+	for count in range(len_str):
+		client.append(data[count + offset])
+	client = codecs.decode(client)
+	offset += count
+	print(client)
+
+	#Map name, 260 char string
+	mp = bytearray()
+	for count in range(len_str):
+		mp.append(data[count + offset])
+	mp = codecs.decode(mp)
+	offset += count
+	print(mp)
+
+parseHeader('match.dem')
