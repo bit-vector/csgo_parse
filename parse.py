@@ -14,8 +14,7 @@ def parseHeader(filename):
 	#File header, 8 char string
 	filestamp = decode(header[:8])
 	if filestamp != 'HL2DEMO\0':
-		print('File not valid')
-		return None
+		raise Error('File not valid')
 	out.append(filestamp)
 
 	#Demo protocol, signed int
