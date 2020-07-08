@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+
+from parse import *
+
+filename = 'match.dem'
+parsed_header = parseHeader(filename)
+printHeader(parsed_header)
