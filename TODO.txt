@@ -1,1 +1,1 @@
-Determine how frames are delimited with CS:GO demo files
+Determine how frames are delimited within CS:GO demo files
