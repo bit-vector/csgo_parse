@@ -16,7 +16,7 @@ def print_event(event, msg):
 			if user.name not in players:
 				players.append(user.name)
 
-print(f'Opening \'{filename}\' as DemoFile \'df\'')
+print(f'opening \'{filename}\' as DemoFile \'df\'')
 data = open(filename, 'rb').read()
 df = DemoFile(data)
 print('done reading')
