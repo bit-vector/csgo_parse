@@ -1,73 +1,42 @@
-#!/usr/bin/python3
-#Reference: https://developer.valvesoftware.com/wiki/DEM_Format#:~:text=DEM%20(short%20for%20demo)%20is,play%20music%2C%20and%20other%20functions
+#!/usr/bin/python3 -i
 
-from codecs import decode
-from struct import unpack
+from demoparser.demofile import DemoFile
 
-def parseHeader(filename):
-	fp = open(filename, 'rb')
-	header = fp.readline()
-	fp.close()
+#File for writing
+out_file = 'stats.txt'
 
-	out = []
+#Open and parse .dem file
+filename = input('Filename(default=\'match.dem\'): ')
+if filename == '':
+	filename = 'match.dem'
+print(f'opening \'{filename}\' as DemoFile \'df\'')
+data = open(filename, 'rb').read()
+df = DemoFile(data)
+print('done reading')
+print('parsing \'df\'...')
+df.parse()
+print('finished\n--------\n')
 
-	#File header, 8 char string
-	filestamp = decode(header[:8])
-	if filestamp != 'HL2DEMO\0':
-		raise Error('File not valid')
-	out.append(filestamp)
+#Stat calculations
+players = dict()
+scores = dict()
+match_winner = ''
+for team in df.entities.teams[2:]:
+	scores[team.clan] = team.score
+	if team.score == 16:
+		match_winner = team.clan
 
-	#Demo protocol, signed int
-	protocol_dem = int.from_bytes(header[8:12], byteorder='little', signed=True)
-	out.append(protocol_dem)
+	print(team.clan)
+	userids = team.get_prop('DT_Team', '\"player_array\"')
+	for userid in userids:
+		print('\t', df.entities.get_by_user_id(userid).name)
 
-	#Network protocol, signed int
-	protocol_net = int.from_bytes(header[12:16], byteorder='little', signed=True)
-	out.append(protocol_net)
+print(f'players: {players}')
+print(f'scores: {scores}')
 
-	#Server name, 260 char string
-	svr_name = decode(header[16:276])
-	out.append(svr_name)
+for team in scores:
+		print(f'{team}: {scores[team]}')
+print(f'Winner: {match_winner}')
 
-	#Client name, 260 char string
-	client = decode(header[276:536])
-	out.append(client)
-
-	#Map name, 260 char string
-	mp = decode(header[536:796])
-	out.append(mp)
-
-	#Game directory, 260 char string
-	gdir = decode(header[796:1056])
-	out.append(gdir)
-
-	#Playback time, float
-	pbt = unpack('f', header[1056:1060])
-	out.append(pbt[0])
-
-	#Ticks, signed int
-	ticks = int.from_bytes(header[1060:1064], byteorder='little', signed=True)
-	out.append(ticks)
-
-	#Frames, signed int
-	frames = int.from_bytes(header[1064:1068], byteorder='little', signed=True)
-	out.append(frames)
-
-	#Sign-on length, signed int
-	length = int.from_bytes(header[1068:1072], byteorder='little', signed=True)
-	out.append(length)
-
-	#print(header[1072:])
-
-	return out
-
-def printHeader(header_parsed):
-	header_key = ['Filestamp', 'Demo Protocol', 'Network Protocol', 'Server Name', 'Client Name', 'Map Name', 'Game Directory', 'Playback Time', 'Ticks', 'Frames', 'Sign-on length']
-
-	for i in range(len(header_parsed)):
-		print(f'{header_key[i]}: {header_parsed[i]}')
-
-	return None
-
-def parseLine(line):
-	return None
+fp = open(out_file, 'w')
+fp.close()
