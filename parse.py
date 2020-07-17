@@ -28,15 +28,15 @@ seperate();
 match_winner = ''
 for team in df.entities.teams[2:]:
 	print(f'{team.clan}: {team.score}')
-	players = df.entities.players[2:12]
-	for i in range(len(players)):
-		players[i] = players[i].name
 	if team.score == 16:
 		match_winner = team.clan
 seperate()
 
 print('Players')
 seperate(7)
+players = df.entities.players[2:12]
+for i in range(len(players)):
+	players[i] = players[i].name
 for player in players:
 	print(player)
 seperate()
