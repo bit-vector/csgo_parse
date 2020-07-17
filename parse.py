@@ -18,7 +18,9 @@ df = DemoFile(data)
 print('done reading')
 print('parsing \'df\'...')
 df.parse()
-print('finished\n--------\n')
+print('finished')
+seperate()
+print()
 
 #Stat calculations
 print(f"Map name: {df.header.map_name.decode('utf-8')}")
