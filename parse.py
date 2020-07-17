@@ -1,9 +1,12 @@
-#!/usr/bin/python3 -i
+#!/usr/bin/python3
 
 from demoparser.demofile import DemoFile
 
-#File for writing
-out_file = 'stats.txt'
+num_dashes = 20
+def seperate(n=num_dashes):
+	for count in range(n):
+		print('-', end='')
+	print()
 
 #Open and parse .dem file
 filename = input('Filename(default=\'match.dem\'): ')
@@ -18,25 +21,21 @@ df.parse()
 print('finished\n--------\n')
 
 #Stat calculations
-players = dict()
-scores = dict()
+print(f"Map name: {df.header.map_name.decode('utf-8')}")
+seperate();
 match_winner = ''
 for team in df.entities.teams[2:]:
-	scores[team.clan] = team.score
+	print(f'{team.clan}: {team.score}')
+	players = df.entities.players[2:12]
+	for i in range(len(players)):
+		players[i] = players[i].name
 	if team.score == 16:
 		match_winner = team.clan
+seperate()
 
-	print(team.clan)
-	userids = team.get_prop('DT_Team', '\"player_array\"')
-	for userid in userids:
-		print('\t', df.entities.get_by_user_id(userid).name)
-
-print(f'players: {players}')
-print(f'scores: {scores}')
-
-for team in scores:
-		print(f'{team}: {scores[team]}')
+print('Players')
+seperate(7)
+for player in players:
+	print(player)
+seperate()
 print(f'Winner: {match_winner}')
-
-fp = open(out_file, 'w')
-fp.close()
