@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from demoparser.demofile import DemoFile
-from demoparser.entities import BaseEntity
 
 num_dashes = 20
 def seperate(n=num_dashes):
@@ -29,17 +28,18 @@ for player in df.entities.players:
 	if teamname == '':
 		continue
 	if teamname not in players:
-		players[teamname] = [player.name]
+		players[teamname] = [player]
 	else:
-		players[teamname].append(player.name)
+		players[teamname].append(player)
+
 #Stat calculations
 print(f"Map name: {df.header.map_name.decode('utf-8')}")
-seperate();
+seperate()
 match_winner = ''
 for team in df.entities.teams[2:]:
 	print(f'{team.clan}: {team.score}')
 	for player in players[team.clan]:
-		print(f'\t{player}')
+		print(f'\t{player.name}')
 	if team.score == 16:
 		match_winner = team.clan
 seperate()
