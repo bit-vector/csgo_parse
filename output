@@ -1,0 +1,23 @@
+Filename(default='match.dem'): 
+opening 'match.dem' as DemoFile 'df'
+done reading
+parsing 'df'...
+finished
+--------------------
+
+Map name: de_mirage
+--------------------
+FaZe Clan: 16
+	rain
+	olofmeister
+	karrigan
+	NiKo
+	GuardiaN
+Cloud9: 14
+	RUSH
+	Skadoodle
+	Stewie2K
+	autimatic
+	tarik
+--------------------
+Winner: FaZe Clan
